@@ -1,0 +1,34 @@
+---
+  - name: Playbook for Activity 1 of 12.3
+    hosts: webservers
+    become: true
+    tasks:
+
+    - name: Install docker.io  (state=present is optional)
+      apt:
+        update_cache: yes
+        name: docker.io
+        state: present
+
+    - name: Install Python3-pip
+      apt:
+        name: python3-pip
+        state: present
+
+    - name: Install PIP module Docker
+      pip:
+        name: docker
+        state: present
+
+    - name: Install cyberxsecurity/dvwa container on port 80
+      docker_container:
+        name: dvwa
+        image: cyberxsecurity/dvwa
+        state: started
+        published_ports: 80:80
+        restart_policy: always
+
+    - name: Enable docker service
+      systemd:
+        name: docker
+        state: started
