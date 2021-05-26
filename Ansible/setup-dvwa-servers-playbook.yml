@@ -1,10 +1,10 @@
 ---
-  - name: Playbook for Activity 1 of 12.3
+  - name: Playbook for setting up DVWA web servers
     hosts: webservers
     become: true
     tasks:
 
-    - name: Install docker.io  (state=present is optional)
+    - name: Install docker.io
       apt:
         update_cache: yes
         name: docker.io
