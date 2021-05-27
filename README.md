@@ -2,7 +2,7 @@
 
 The files in this repository were used to configure the network depicted below.
 
-![ELK Stack Network Diagram](/Diagrams/ELK_Stack_Network_Diagram.png)
+![ELK stack network diagram](/Diagrams/ELK_stack_network.png)
 
 These files have been tested and used to generate a live ELK deployment on Azure. They can be used to either recreate the entire deployment pictured above, or alternatively, select files may be used to install certain items, such as Filebeat. The playbook files are:
 
@@ -13,6 +13,7 @@ These files have been tested and used to generate a live ELK deployment on Azure
 | ![filebeat-playbook.yml](/Ansible/filebeat-playbook.yml) | Install Filebeat monitoring onto Webservers |
 | ![metricbeat-playbook.yml](/Ansible/metricbeat-playbook.yml) | Install Metricbeat monitoring onto Webservers |
 
+### Contents
 This document contains the following details:
 - Description of the Topology
 - Access Policies
@@ -26,9 +27,9 @@ This document contains the following details:
 
 The main purpose of this network is to expose a load-balanced and monitored instance of DVWA, the D*mn Vulnerable Web Application.
 
-Load balancing ensures high availability for the application, in addition to restricting external access to the network.
+Load balancing ensures high availability for the Vulnerable web application, in addition to restricting external access to the network.
 
-Integrating an ELK server allows users to easily monitor the vulnerable VMs for changes to the file system and system metrics.
+Integrating an ELK server allows users to easily monitor the vulnerable VMs for irregularities highlighted in system logs as well as monitoring system metrics.
 
 The configuration details of each machine may be found below.
 
@@ -42,25 +43,23 @@ The configuration details of each machine may be found below.
 
 ### Access Policies
 
-The machines on the internal network are not exposed to the public Internet. 
+The machines on the internal network are not exposed to the public Internet except for the Jump-Box machine. This means that only the Jump-Box machine is able to be logged into from an IP address outside the Azure resource group. The Jump-box machine can only be accessed (logged into) from IP address 101.182.75.17 (identified as "Workstation" in the diagram above).
 
-Only the Jump-Box and ELK-server machines can accept connections from the Internet. Access to these machines are only allowed from the following IP address:
-- 101.182.75.17
-
-Machines within the network can only be accessed by _____.
-- _TODO: Which machine did you allow to access your ELK VM? What was its IP address?_
+All other machines within the network can only be accessed (logged into) from the Jump-Box machine.
 
 A summary of the access policies in place can be found in the table below.
 
 | Name     | Publicly Accessible | Allowed IP Addresses |
 |----------|---------------------|----------------------|
-| Jump Box | Yes/No              | 10.0.0.1 10.0.0.2    |
-|          |                     |                      |
-|          |                     |                      |
+| Jump Box | Yes                 | 40.127.80.215        |
+| Web-1    | No                  | 10.0.0.5             |
+| Web-2    | No                  | 10.0.0.6             |
+| Web-3    | No                  | 10.0.0.7             |
+| ELK-server | No                  | 10.1.0.4             |
 
 ### Elk Configuration
 
-Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because it enables the installation instructions for the ELK machine to be prepared and reviewed before deployment. In addition, new ELK machines can be deployed with the same configuration time and again, quickly and consistently.
+Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because it enables the installation instructions for the ELK machine to be prepared and reviewed prior to deployment. In addition, new ELK machines may be deployed using the same configuration time and again, quickly and consistently.
 
 The playbook implements the following tasks:
 - Install the Docker engine onto the VM to allow the use of containers
@@ -76,20 +75,26 @@ The following screenshot displays the result of running `docker ps` after succes
 
 ### Target Machines & Beats
 This ELK server is configured to monitor the following machines:
-- _TODO: List the IP addresses of the machines you are monitoring_
+- 10.0.0.5 (Web-1)
+- 10.0.0.6 (Web-2)
+- 10.0.0.7 (Web-3)
 
 We have installed the following Beats on these machines:
-- _TODO: Specify which Beats you successfully installed_
+- Filebeat
+- Metricbeat
 
 These Beats allow us to collect the following information from each machine:
-- _TODO: In 1-2 sentences, explain what kind of data each beat collects, and provide 1 example of what you expect to see. E.g., `Winlogbeat` collects Windows logs, which we use to track user logon events, etc._
+- Filebeat collects and organises log files from the machines being monitored. An example of the logging performed is file system information to identify any files that have been changed and when the change occurred.
+- Metricbeat collects metrics on the machines being monitored and the services running on those machines. An example of the metrics taken are CPU and memory utilisation.
 
 ### Using the Playbook
 In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
 
 SSH into the control node and follow the steps below:
-- Copy the _____ file to _____.
-- Update the _____ file to include...
+- Copy the `install-elk.yml` file to /etc/ansible/files.
+- Copy the `filebeat-playbook.yml` file to /etc/ansible/files.
+- Copy the `metricbeat-playbook.yml` file to /etc/ansible/files.
+- Update the /etc/ansible/hosts file to include the IP address for the Server
 - Run the playbook, and navigate to ____ to check that the installation worked as expected.
 
 _TODO: Answer the following questions to fill in the blanks:_
