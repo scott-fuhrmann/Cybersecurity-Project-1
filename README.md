@@ -43,7 +43,7 @@ The configuration details of each machine may be found below.
 
 ### Access Policies
 
-The machines on the internal network are not exposed to the public Internet except for the Jump-Box machine. This means that only the Jump-Box machine is able to be logged into from an IP address outside the Azure resource group. The Jump-box machine can only be accessed (logged into) from IP address 101.182.75.17 (identified as "Workstation" in the diagram above).
+The machines on the internal network are not exposed to the public Internet except for the Jump-Box machine. This means that only the Jump-Box machine can be logged into from an IP address outside the Azure resource group. The Jump-box machine can only be accessed (logged into) from IP address 101.182.75.17 (identified as "Workstation" in the diagram above).
 
 All other machines within the network can only be accessed (logged into) from the Jump-Box machine.
 
@@ -59,7 +59,7 @@ A summary of the access policies in place can be found in the table below.
 
 ### Elk Configuration
 
-Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because it enables the installation instructions for the ELK machine to be prepared and reviewed prior to deployment. In addition, new ELK machines may be deployed using the same configuration time and again, quickly and consistently.
+Ansible was used to automate configuration of the ELK machine. No configuration was performed manually, which is advantageous because it enables the installation instructions for the ELK machine to be prepared and reviewed prior to deployment. In addition, new ELK machines may be deployed using the same configuration time and again, quickly, and consistently.
 
 The playbook implements the following tasks:
 - Install the Docker engine onto the VM to allow the use of containers
@@ -67,7 +67,7 @@ The playbook implements the following tasks:
 - Use the Python 3 Package Manager to install the Python client for Docker
 - Increase the Virtual memory on the VM to allow the ELK applications to run successfully
 - Download and launch the ELK application into the Docker container
-- Ensure that the Docker container is started everytime that the VM is started
+- Ensure that the Docker container is started every time that the VM is started
 
 The following screenshot displays the result of running `docker ps` after successfully configuring the ELK instance.
 
@@ -88,18 +88,16 @@ These Beats allow us to collect the following information from each machine:
 - Metricbeat collects metrics on the machines being monitored and the services running on those machines. An example of the metrics taken are CPU and memory utilisation.
 
 ### Using the Playbook
-In order to use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
+To use the playbook, you will need to have an Ansible control node already configured. Assuming you have such a control node provisioned: 
 
 SSH into the control node and follow the steps below:
-- Copy the `install-elk.yml` file to /etc/ansible/files.
-- Copy the `filebeat-playbook.yml` file to /etc/ansible/files.
-- Copy the `metricbeat-playbook.yml` file to /etc/ansible/files.
-- Update the /etc/ansible/hosts file to include the IP address for the Server
-- Run the playbook, and navigate to ____ to check that the installation worked as expected.
-
-_TODO: Answer the following questions to fill in the blanks:_
-- _Which file is the playbook? Where do you copy it?_
-- _Which file do you update to make Ansible run the playbook on a specific machine? How do I specify which machine to install the ELK server on versus which to install Filebeat on?_
-- _Which URL do you navigate to in order to check that the ELK server is running?
-
-_As a **Bonus**, provide the specific commands the user will need to run to download the playbook, update the files, etc._
+- Copy the `install-elk.yml` file from the Ansible folder to `/etc/ansible/roles`.
+- Copy the `filebeat-playbook.yml` file from the Ansible folder to `/etc/ansible/roles`.
+- Copy the `metricbeat-playbook.yml` file from the Ansible folder to `/etc/ansible/roles`.
+- Copy the `filebeat-config.yml` file from the Ansible/beats_config folder to `/etc/ansible/files`.
+- Copy the `metricbeat-config.yml` file from the Ansible/beats_config folder to `/etc/ansible/files`.
+- Update the `/etc/ansible/hosts` file with relevant IP addresses:
+  - Add the IP addresses with Ansible Python Interpreter for any web servers to be monitored under the `[webservers]` heading, for example `10.0.0.5 ansible_python_interpreter=/usr/bin/python3`
+  - Add the IP address with Ansible Python Interpreter for the ELK server under the `[elk]` heading (adding the heading if not already there). For example the entry could look like `10.1.0.4 ansible_python_interpreter=/usr/bin/python3` 
+- If the IP address for the ELK server machine is not 10.1.0.4 then update the instances of 10.1.0.4 in the `filebeat-config.yml` file and `metricbeat-config.yml` in `/etc/ansible/files`.
+- Run the playbook and navigate to `http://<public IP address for ELK server>:5601/app/kibana` from the browser on the whitelisted Workstation to check that the installation worked as expected.
